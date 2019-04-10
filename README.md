@@ -5,7 +5,7 @@ mobile HTML5 Game Development.
 
 It is released under both the GPL and MIT license to do with what you will.  
 
-Creator of the game: http://cykod.github.com/AlienInvasion/  
+Creator of the game: https://github.com/cykod/AlienInvasion  
 
 Contributors of the group project for CPSC 254:  
 Alfonso Figueroa
