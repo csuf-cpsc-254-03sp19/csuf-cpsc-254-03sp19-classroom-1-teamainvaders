@@ -14,4 +14,6 @@ Geonhyeong Park
 
 How to run the game:
 --------------------  
-[insert terminal commands here]  
+1) Download the files from git.  
+2) Go to the directory file in the terminal.  
+3) Type in terminal "open index.html"  
