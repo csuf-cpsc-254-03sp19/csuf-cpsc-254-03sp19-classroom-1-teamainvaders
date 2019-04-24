@@ -10,13 +10,13 @@ var sprites = {
 };
 
 var enemies = {
-  straight: { x: 0,   y: -50, sprite: 'enemy_ship', health: 10, 
+  straight: { x: 0,   y: -50, sprite: 'enemy_ship', health: 10,
               E: 100 },
-  ltr:      { x: 0,   y: -100, sprite: 'enemy_purple', health: 10, 
+  ltr:      { x: 0,   y: -100, sprite: 'enemy_purple', health: 10,
               B: 75, C: 1, E: 100, missiles: 2  },
-  circle:   { x: 250,   y: -50, sprite: 'enemy_circle', health: 10, 
+  circle:   { x: 250,   y: -50, sprite: 'enemy_circle', health: 10,
               A: 0,  B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI/2 },
-  wiggle:   { x: 100, y: -50, sprite: 'enemy_bee', health: 20, 
+  wiggle:   { x: 100, y: -50, sprite: 'enemy_bee', health: 20,
               B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2 },
   step:     { x: 0,   y: -50, sprite: 'enemy_circle', health: 10,
               B: 150, C: 1.2, E: 75 }
@@ -31,16 +31,14 @@ var OBJECT_PLAYER = 1,
 var startGame = function() {
   var ua = navigator.userAgent.toLowerCase();
 
-  // Only 1 row of stars
-  if(ua.match(/android/)) {
-    Game.setBoard(0,new Starfield(50,0.6,100,true));
-  } else {
+  // removed android phone support
     Game.setBoard(0,new Starfield(20,0.4,100,true));
     Game.setBoard(1,new Starfield(50,0.6,100));
     Game.setBoard(2,new Starfield(100,1.0,50));
-  }  
-  Game.setBoard(3,new TitleScreen("Alien Invasion", 
-                                  "Press fire to start playing",
+
+  var sub = "Left and Right Arrows: Move Ship";
+  Game.setBoard(3,new TitleScreen("Alien Invasion",
+                                  "Press Spacebar to start", sub,
                                   playGame));
 };
 
@@ -67,14 +65,14 @@ var playGame = function() {
 };
 
 var winGame = function() {
-  Game.setBoard(3,new TitleScreen("You win!", 
-                                  "Press fire to play again",
+  Game.setBoard(3,new TitleScreen("You win!",
+                                  "Congratulations!", "Press space to play again",
                                   playGame));
 };
 
 var loseGame = function() {
-  Game.setBoard(3,new TitleScreen("You lose!", 
-                                  "Press fire to play again",
+  Game.setBoard(3,new TitleScreen("You lose!",
+                                  "Tip: Avoid enemies and enemy lasers!", "Press space to play again",
                                   playGame));
 };
 
@@ -82,13 +80,13 @@ var Starfield = function(speed,opacity,numStars,clear) {
 
   // Set up the offscreen canvas
   var stars = document.createElement("canvas");
-  stars.width = Game.width; 
+  stars.width = Game.width;
   stars.height = Game.height;
   var starCtx = stars.getContext("2d");
 
   var offset = 0;
 
-  // If the clear option is set, 
+  // If the clear option is set,
   // make the background black instead of transparent
   if(clear) {
     starCtx.fillStyle = "#000";
@@ -139,7 +137,7 @@ var Starfield = function(speed,opacity,numStars,clear) {
   };
 };
 
-var PlayerShip = function() { 
+var PlayerShip = function() {
   this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200 });
 
   this.reload = this.reloadTime;
@@ -154,7 +152,7 @@ var PlayerShip = function() {
     this.x += this.vx * dt;
 
     if(this.x < 0) { this.x = 0; }
-    else if(this.x > Game.width - this.w) { 
+    else if(this.x > Game.width - this.w) {
       this.x = Game.width - this.w;
     }
 
@@ -176,13 +174,13 @@ PlayerShip.prototype.hit = function(damage) {
   if(this.board.remove(this)) {
     loseGame();
   }
-};
+}; // have player ship do explosion animation too when it gets hit?
 
 
 var PlayerMissile = function(x,y) {
   this.setup('missile',{ vy: -700, damage: 10 });
   this.x = x - this.w/2;
-  this.y = y - this.h; 
+  this.y = y - this.h;
 };
 
 PlayerMissile.prototype = new Sprite();
@@ -194,8 +192,8 @@ PlayerMissile.prototype.step = function(dt)  {
   if(collision) {
     collision.hit(this.damage);
     this.board.remove(this);
-  } else if(this.y < -this.h) { 
-      this.board.remove(this); 
+  } else if(this.y < -this.h) {
+      this.board.remove(this);
   }
 };
 
@@ -209,9 +207,9 @@ var Enemy = function(blueprint,override) {
 Enemy.prototype = new Sprite();
 Enemy.prototype.type = OBJECT_ENEMY;
 
-Enemy.prototype.baseParameters = { A: 0, B: 0, C: 0, D: 0, 
+Enemy.prototype.baseParameters = { A: 0, B: 0, C: 0, D: 0,
                                    E: 0, F: 0, G: 0, H: 0,
-                                   t: 0, reloadTime: 0.75, 
+                                   t: 0, reloadTime: 0.75,
                                    reload: 0 };
 
 Enemy.prototype.step = function(dt) {
@@ -253,7 +251,7 @@ Enemy.prototype.hit = function(damage) {
   if(this.health <=0) {
     if(this.board.remove(this)) {
       Game.points += this.points || 100;
-      this.board.add(new Explosion(this.x + this.w/2, 
+      this.board.add(new Explosion(this.x + this.w/2,
                                    this.y + this.h/2));
     }
   }
@@ -275,7 +273,7 @@ EnemyMissile.prototype.step = function(dt)  {
     collision.hit(this.damage);
     this.board.remove(this);
   } else if(this.y > Game.height) {
-      this.board.remove(this); 
+      this.board.remove(this);
   }
 };
 
@@ -299,5 +297,3 @@ Explosion.prototype.step = function(dt) {
 window.addEventListener("load", function() {
   Game.initialize("game",sprites,startGame);
 });
-
-
