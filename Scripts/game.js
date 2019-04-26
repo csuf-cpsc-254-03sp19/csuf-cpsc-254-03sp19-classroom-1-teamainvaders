@@ -10,15 +10,15 @@ var sprites = {
 };
 
 var enemies = {
-  straight: { x: 0,   y: -50, sprite: 'enemy_ship', health: 10,
+  straight: { x: 50,   y: -50, sprite: 'enemy_ship', health: 10,
               E: 100 },
-  ltr:      { x: 0,   y: -100, sprite: 'enemy_purple', health: 10,
+  ltr:      { x: 50,   y: -100, sprite: 'enemy_purple', health: 10,
               B: 75, C: 1, E: 100, missiles: 2  },
-  circle:   { x: 250,   y: -50, sprite: 'enemy_circle', health: 10,
+  circle:   { x: 300,   y: -50, sprite: 'enemy_circle', health: 10,
               A: 0,  B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI/2 },
-  wiggle:   { x: 100, y: -50, sprite: 'enemy_bee', health: 20,
+  wiggle:   { x: 300, y: -50, sprite: 'enemy_bee', health: 20,
               B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2 },
-  step:     { x: 0,   y: -50, sprite: 'enemy_circle', health: 10,
+  step:     { x: 50,   y: -50, sprite: 'enemy_circle', health: 10,
               B: 150, C: 1.2, E: 75 }
 };
 
@@ -35,6 +35,7 @@ var startGame = function() {
     Game.setBoard(0,new Starfield(20,0.4,100,true));
     Game.setBoard(1,new Starfield(50,0.6,100));
     Game.setBoard(2,new Starfield(100,1.0,50));
+    Game.setBoard(5,new GamePoints(0));
 
   var sub = "Left and Right Arrows: Move Ship";
   Game.setBoard(3,new TitleScreen("Alien Invasion",
@@ -50,6 +51,7 @@ var level1 = [
   [ 17800,  20000, 500, 'straight', { x: 50 } ],
   [ 18200,  20000, 500, 'straight', { x: 90 } ],
   [ 18200,  20000, 500, 'straight', { x: 10 } ],
+  [ 20000,  23000, 500, 'straight', { x: 250 } ],
   [ 22000,  25000, 400, 'wiggle', { x: 150 }],
   [ 22000,  25000, 400, 'wiggle', { x: 100 }]
 ];
@@ -66,14 +68,14 @@ var playGame = function() {
 
 var winGame = function() {
   Game.setBoard(3,new TitleScreen("You win!",
-                                  "Congratulations!", "Press space to play again",
-                                  playGame));
+                                  "Congratulations!", "Press space to go to the main menu",
+                                  startGame));
 };
 
 var loseGame = function() {
   Game.setBoard(3,new TitleScreen("You lose!",
-                                  "Tip: Avoid enemies and enemy lasers!", "Press space to play again",
-                                  playGame));
+                                  "Tip: Avoid enemies and enemy lasers!", "Press space to go to the main menu",
+                                  startGame));
 };
 
 var Starfield = function(speed,opacity,numStars,clear) {

@@ -33,7 +33,6 @@ var Game = new function() {
 
     this.playerOffset = 10;
     this.canvasMultiplier= 1;
-//    this.setupMobile();
 
     this.width = this.canvas.width;
     this.height= this.canvas.height;
@@ -44,10 +43,6 @@ var Game = new function() {
     this.setupInput();
 
     this.loop();
-
-  //  if(this.mobile) {
-  //    this.setBoard(4,new TouchControls());
-  //  }
 
     SpriteSheet.load(sprite_data,callback);
   };
@@ -96,47 +91,6 @@ var Game = new function() {
 
   // Change an active game board
   this.setBoard = function(num,board) { boards[num] = board; };
-
-
-/**  this.setupMobile = function() {
-    var container = document.getElementById("container"),
-        hasTouch =  !!('ontouchstart' in window),
-        w = window.innerWidth, h = window.innerHeight;
-
-    if(hasTouch) { this.mobile = true; }
-
-    if(screen.width >= 1280 || !hasTouch) { return false; }
-
-    if(w > h) {
-      alert("Please rotate the device and then click OK");
-      w = window.innerWidth; h = window.innerHeight;
-    }
-
-    container.style.height = h*2 + "px";
-    window.scrollTo(0,1);
-
-    h = window.innerHeight + 2;
-    container.style.height = h + "px";
-    container.style.width = w + "px";
-    container.style.padding = 0;
-
-    if(h >= this.canvas.height * 1.75 || w >= this.canvas.height * 1.75) {
-      this.canvasMultiplier = 2;
-      this.canvas.width = w / 2;
-      this.canvas.height = h / 2;
-      this.canvas.style.width = w + "px";
-      this.canvas.style.height = h + "px";
-    } else {
-      this.canvas.width = w;
-      this.canvas.height = h;
-    }
-
-    this.canvas.style.position='absolute';
-    this.canvas.style.left="0px";
-    this.canvas.style.top="0px";
-
-  }; **/ //mobile set up
-
 };
 
 
@@ -359,80 +313,6 @@ Level.prototype.step = function(dt) {
 Level.prototype.draw = function(ctx) { };
 
 // Mobile controls???
-var TouchControls = function() {
-
-  var gutterWidth = 10;
-  var unitWidth = Game.width/5;
-  var blockWidth = unitWidth-gutterWidth;
-
-  this.drawSquare = function(ctx,x,y,txt,on) {
-    ctx.globalAlpha = on ? 0.9 : 0.6;
-    ctx.fillStyle =  "#CCC";
-    ctx.fillRect(x,y,blockWidth,blockWidth);
-
-    ctx.fillStyle = "#FFF";
-    ctx.globalAlpha = 1.0;
-    ctx.font = "bold " + (3*unitWidth/4) + "px arial";
-
-    var txtSize = ctx.measureText(txt);
-
-    ctx.fillText(txt,
-                 x+blockWidth/2-txtSize.width/2,
-                 y+3*blockWidth/4+5);
-  };
-
-  this.draw = function(ctx) {
-    ctx.save();
-
-    var yLoc = Game.height - unitWidth;
-    this.drawSquare(ctx,gutterWidth,yLoc,"\u25C0", Game.keys['left']);
-    this.drawSquare(ctx,unitWidth + gutterWidth,yLoc,"\u25B6", Game.keys['right']);
-    this.drawSquare(ctx,4*unitWidth,yLoc,"A",Game.keys['fire']);
-
-    ctx.restore();
-  };
-
-  this.step = function(dt) { };
-
-  this.trackTouch = function(e) {
-    var touch, x;
-
-    e.preventDefault();
-    Game.keys['left'] = false;
-    Game.keys['right'] = false;
-    for(var i=0;i<e.targetTouches.length;i++) {
-      touch = e.targetTouches[i];
-      x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
-      if(x < unitWidth) {
-        Game.keys['left'] = true;
-      }
-      if(x > unitWidth && x < 2*unitWidth) {
-        Game.keys['right'] = true;
-      }
-    }
-
-    if(e.type == 'touchstart' || e.type == 'touchend') {
-      for(i=0;i<e.changedTouches.length;i++) {
-        touch = e.changedTouches[i];
-        x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
-        if(x > 4 * unitWidth) {
-          Game.keys['fire'] = (e.type == 'touchstart');
-        }
-      }
-    }
-  };
-
-  Game.canvas.addEventListener('touchstart',this.trackTouch,true);
-  Game.canvas.addEventListener('touchmove',this.trackTouch,true);
-  Game.canvas.addEventListener('touchend',this.trackTouch,true);
-
-  // For Android
-  Game.canvas.addEventListener('dblclick',function(e) { e.preventDefault(); },true);
-  Game.canvas.addEventListener('click',function(e) { e.preventDefault(); },true);
-
-  Game.playerOffset = unitWidth + 20;
-};
-
 
 var GamePoints = function() {
   Game.points = 0;
