@@ -45,6 +45,7 @@ var Game = new function() {
     this.loop();
 
     SpriteSheet.load(sprite_data,callback);
+
   };
 
 
@@ -68,6 +69,7 @@ var Game = new function() {
        e.preventDefault();
       }
     },false);
+
   };
 
 
@@ -123,6 +125,7 @@ var TitleScreen = function TitleScreen(title,subtitle,sub2,callback) {
   this.step = function(dt) {
     if(!Game.keys['fire']) up = true;
     if(up && Game.keys['fire'] && callback) callback();
+
   };
 
   this.draw = function(ctx) {
@@ -335,3 +338,28 @@ var GamePoints = function() {
 
   this.step = function(dt) { };
 };
+
+var gameBrightness = 10;
+
+function pause() {
+    var pause = confirm("You paused the game, click 'OK' to continue your game and the other button to go to options");
+
+    if (pause == false) { //Didn't click on OK
+      var options = confirm("Click on 'Ok' to not change brigthness, but the other one to change the brightness to a random value");
+
+      if (options == true) { //Clicked on OK
+         ReDopause();
+         return;
+      }
+      else { //Didn't click on OK
+         brightness = Math.floor(Math.random() * 20);
+         document.getElementById("brightness").innerHTML = brightness;
+         ReDopause();
+         return;
+      }
+    }
+ }
+
+ var ReDopause = function() {
+    pause();
+ }
