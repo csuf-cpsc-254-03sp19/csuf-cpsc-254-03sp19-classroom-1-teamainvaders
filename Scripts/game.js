@@ -9,6 +9,7 @@ var sprites = {
  enemy_missile: { sx: 9, sy: 42, w: 3, h: 20, frame: 1, }
 };
 
+// enemy ships initialization
 var enemies = {
   straight: { x: 50,   y: -50, sprite: 'enemy_ship', health: 10,
               E: 100 },
@@ -31,18 +32,20 @@ var OBJECT_PLAYER = 1,
 var startGame = function() {
   var ua = navigator.userAgent.toLowerCase();
 
-  // removed android phone support
+  // removed android phone support, sets up game
     Game.setBoard(0,new Starfield(20,0.4,100,true));
     Game.setBoard(1,new Starfield(50,0.6,100));
     Game.setBoard(2,new Starfield(100,1.0,50));
     Game.setBoard(5,new GamePoints(0));
 
+ // sets up title screen
   var sub = "Left and Right Arrows: Move Ship";
   Game.setBoard(3,new TitleScreen("Alien Invasion",
                                   "Press Spacebar to start", sub,
                                   playGame));
 };
 
+// makes the level of the game
 var level1 = [
  // Start,   End, Gap,  Type,   Override
   [ 0,      4000,  500, 'step' ],
@@ -66,6 +69,7 @@ var playGame = function() {
   Game.setBoard(5,new GamePoints(0));
 };
 
+// changes to win and lose: goes to startGame function after instead
 var winGame = function() {
   Game.setBoard(3,new TitleScreen("You win!",
                                   "Congratulations!", "Press space to go to the main menu",
