@@ -54,7 +54,6 @@ var Game = new function() {
   var KEY_CODES = { 37:'left', 39:'right', 32 :'fire' };
   this.keys = {};
 
-  // cannot use up and down keys
   this.setupInput = function() {
     window.addEventListener('keydown',function(e) {
       if(KEY_CODES[e.keyCode]) {
@@ -120,6 +119,7 @@ var SpriteSheet = new function() {
   return this;
 };
 
+// TitleScreen modified from the original program to have a second subtitle
 var TitleScreen = function TitleScreen(title,subtitle,sub2,callback) {
   var up = false;
   this.step = function(dt) {
@@ -131,6 +131,7 @@ var TitleScreen = function TitleScreen(title,subtitle,sub2,callback) {
   this.draw = function(ctx) {
     ctx.fillStyle = "#FFFFFF";
 
+    // changed fonts and sizes from original
     ctx.font = "bold 30px Syncopate";
     var measure = ctx.measureText(title);
     ctx.fillText(title,Game.width/2 - measure.width/2,Game.height/2);
